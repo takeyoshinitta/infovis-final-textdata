@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <title>Word Tree Example</title>
+  <title>Word Tree Example</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    function findMostFrequentWord(str) {
+        // Split the string into an array of words
+        var words = str.split(/\W+/);
+
+        // Create an object to keep track of word frequency
+        var wordCount = {};
+
+        // Loop through the words array and count the frequency of each word
+        for (const element of words) {
+            var w = element.toLowerCase();
+            if (wordCount[w]) {
+            wordCount[w]++;
+            } else {
+            wordCount[w] = 1;
+            }
+        }
+
+        // Find the word with the highest frequency
+        var maxCount = 0;
+        var mostFrequentWord = '';
+        for (var w in wordCount) {
+            if (wordCount[w] > maxCount) {
+            maxCount = wordCount[w];
+            mostFrequentWord = w;
+            }
+        }
+
+        return mostFrequentWord;
+    }
+
+
+    google.charts.load('current', {packages:['wordtree']});
+    google.charts.setOnLoadCallback(drawSimpleNodeChart);
+    function drawSimpleNodeChart() {
+      var data = google.visualization.arrayToDataTable(
+        [['Phrases'], ['{{ string }}']]
+      );
+      var options = {
+        wordtree: {
+          format: 'implicit',
+          type: 'double',
+          word: findMostFrequentWord('{{ string }}')
+        }
+      };
+
+      var wordtree = new google.visualization.WordTree(document.getElementById('wordtree_double'));
+      wordtree.draw(data, options);
+    }
+  </script>
+
 </head>
 <body>
-<div id="body">
-    <div id="footer">
-        <div class="hint">click or option-click to expand or collapse</div>
-    </div>
-</div>
-<script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+    <h1>Upload a Text File</h1>
+    <form method="POST" action="{{ url_for('process_file') }}" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file">
+        <button type="submit">Upload</button>
+    </form>
+    <p>Content</p>
+    <div> {{ string }} </div>
+    <p>Word Tree</p>
+    <div id="wordtree_double" style="width: 900px; height: 500px;"></div>
 </body>
 </html>
