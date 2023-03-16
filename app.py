@@ -15,7 +15,7 @@ def process_file():
     # convert the contents to a string
     contents_str = contents.decode('utf-8')
 
-    return render_template('index.html', string=contents_str)
+    return render_template('index.html', input_str=contents_str)
 
 if __name__ == '__main__':
     app.run(debug=True)
