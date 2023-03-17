@@ -14,8 +14,8 @@ def process_file():
     contents = file.read()
     # convert the contents to a string
     contents_str = contents.decode('utf-8')
-
-    return render_template('index.html', input_str=contents_str)
+    words = list(set(contents_str.split()))
+    return render_template('index.html', input_str=contents_str, words=words)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,73 +3,23 @@
 <head>
   <title>Word Tree Example</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+  
 </head>
 <body>
-    <h1>Upload a Text File</h1>
-    <form method="POST" action="{{ url_for('process_file') }}" enctype="multipart/form-data">
-        <input type="file" id="file-input" name="file">
-        <button type="submit">Upload</button>
-    </form>
-    <p>Content</p>
-    <p type="text" id="inputText"> {{ input_str }} </p>
-    <p>Word Tree</p>
-    <script type="text/javascript">
-
-      var inputData = document.getElementById("inputText")
-      var txtData = inputData.textContent
-
-      console.log(txtData)
-  
-      function findMostFrequentWord(str) {
-          // Split the string into an array of words
-          var words = str.split(/\W+/);
-  
-          // Create an object to keep track of word frequency
-          var wordCount = {};
-  
-          // Loop through the words array and count the frequency of each word
-          for (const element of words) {
-              var w = element.toLowerCase();
-              if (wordCount[w]) {
-              wordCount[w]++;
-              } else {
-              wordCount[w] = 1;
-              }
-          }
-  
-          // Find the word with the highest frequency
-          var maxCount = 0;
-          var mostFrequentWord = '';
-          for (var w in wordCount) {
-              if (wordCount[w] > maxCount) {
-              maxCount = wordCount[w];
-              mostFrequentWord = w;
-              }
-          }
-  
-          return mostFrequentWord;
-      }
-  
-  
-      google.charts.load('current', {packages:['wordtree']});
-      google.charts.setOnLoadCallback(drawSimpleNodeChart);
-      function drawSimpleNodeChart() {
-        var data = google.visualization.arrayToDataTable(
-          [['Phrases'], [txtData]]
-        );
-        var options = {
-          wordtree: {
-            format: 'implicit',
-            type: 'double',
-            word: findMostFrequentWord(txtData)
-          }
-        };
-  
-        var wordtree = new google.visualization.WordTree(document.getElementById('wordtree_double'));
-        wordtree.draw(data, options);
-      }
-    </script>
-        <div id="wordtree_double" style="width: 900px; height: 500px;"></div>
+  <h1>Upload a Text File</h1>
+  <form method="POST" action="{{ url_for('process_file') }}" enctype="multipart/form-data">
+    <input type="file" id="file-input" name="file">
+    <button type="submit">Upload</button>
+  </form>
+  <p>Content</p>
+  <p type="text" id="inputText">{{ input_str }}</p>
+  <select id="wordSelect">
+    {% for word in words%}
+      <option value="{{ word }}">{{ word }}</option>
+    {% endfor %}
+  </select>
+  <p>Word Tree</p>
+  <script type="text/javascript" src="/static/js/main.js"></script>
+  <div id="wordtree_double"></div>
 </body>
 </html>
