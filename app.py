@@ -12,6 +12,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    file_path = url_for('static', filename='image/wordcloud.png')
+
+    # Remove existing word cloud image
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        
     return render_template('index.html')
 
 @app.route('/process_file', methods=['POST'])
