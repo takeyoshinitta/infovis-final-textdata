@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import mpld3
 
 
-
 app = Flask(__name__)
 
 @app.route('/')
