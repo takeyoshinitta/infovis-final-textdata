@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <title>Word Tree Example</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   
 </head>
@@ -13,13 +14,14 @@
   </form>
   <p>Content</p>
   <p type="text" id="inputText">{{ input_str }}</p>
+  <p>Select Word</p>
   <select id="wordSelect">
     {% for word in words%}
       <option value="{{ word }}">{{ word }}</option>
     {% endfor %}
   </select>
   <p>Word Tree</p>
-  <script type="text/javascript" src="/static/js/main.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
   <div id="wordtree_double"></div>
 </body>
 </html>

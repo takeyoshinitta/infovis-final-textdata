@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
+# from my_wordcloud import generate_word_cloud
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ def process_file():
     # convert the contents to a string
     contents_str = contents.decode('utf-8')
     words = list(set(contents_str.split()))
+    # generate_word_cloud(file)
     return render_template('index.html', input_str=contents_str, words=words)
 
 if __name__ == '__main__':

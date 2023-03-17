@@ -36,6 +36,12 @@ if (selectedWord === "") {
   selectedWord = findMostFrequentWord(txtData);
 }
 
+// redraw the word tree every time the user selects a new word
+wordSelect.addEventListener("change", function() {
+  selectedWord = wordSelect.value;
+  drawSimpleNodeChart();
+});
+
 google.charts.load("current", { packages: ["wordtree"] });
 google.charts.setOnLoadCallback(drawSimpleNodeChart);
 function drawSimpleNodeChart() {
@@ -48,6 +54,7 @@ function drawSimpleNodeChart() {
       format: "implicit",
       type: "double",
       word: selectedWord,
+      colors: ['red', 'black', 'green']
     },
   };
 
