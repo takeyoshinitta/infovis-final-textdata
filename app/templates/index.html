@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <title>Word Tree</title>
-  <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}?{{ timestamp }}"> -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  
+  <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="https://mpld3.github.io/js/mpld3.v0.5.5.dev1.min.js"></script>
 </head>
 <body>
   <h1>Word Tree</h1>
@@ -24,5 +25,10 @@
   <h4>Word Tree</h4>
   <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
   <div id="wordtree_double"></div>
+
+  <h4>Word Cloud</h4>
+  <!-- {{ wordcloud_html|safe }} -->
+  <img src="{{ url_for('static', filename='image/wordcloud.png') }}?{{ timestamp }}" alt="Word Cloud">
+
 </body>
 </html>
