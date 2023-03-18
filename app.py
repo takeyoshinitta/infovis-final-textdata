@@ -4,7 +4,7 @@ import os
 import time
 import io
 import matplotlib.pyplot as plt
-import mpld3
+# import mpld3
 
 
 app = Flask(__name__)
