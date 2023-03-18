@@ -4,8 +4,3 @@ requests
 gunicorn
 WordCloud
 STOPWORDS
-os
-time
-io
-matplotlib.pyplot
-mpld3
