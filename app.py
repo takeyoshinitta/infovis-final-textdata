@@ -33,8 +33,6 @@ def process_file():
     # convert word_list to JSON and pass it to the template
     word_list_json = json.dumps(word_list)
 
-    print(word_list_json)
-
     timestamp = int(time.time())
 
     return render_template('index.html', input_str=contents_str, words=words, word_json=word_list_json, timestamp=timestamp)
