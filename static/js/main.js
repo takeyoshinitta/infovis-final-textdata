@@ -1,69 +1,67 @@
-function findMostFrequentWord(str) {
-  // Split the string into an array of words
-  var words = str.split(/\W+/);
+// retrieve word_list data from the Flask route
+var word_list = {{ word_list|safe }};
+var input_data = document.getElementById("inputText");
+var txt_data = input_data.textContent;
 
-  // Create an object to keep track of word frequency
-  var wordCount = {};
+// create a scale for the font sizes
+var fontScale = d3.scaleLinear()
+  .domain([0, d3.max(word_list, function(d) { return d.size; })])
+  .range([10, 70]);
 
-  // Loop through the words array and count the frequency of each word
-  for (const element of words) {
-    var w = element.toLowerCase();
-    if (wordCount[w]) {
-      wordCount[w]++;
-    } else {
-      wordCount[w] = 1;
-    }
-  }
+// create a d3-cloud layout
+var layout = d3.layout.cloud()
+  .size([800, 400])
+  .words(word_list)
+  .padding(5)
+  .rotate(function() { return ~~(Math.random() * 2) * 90; })
+  .font("Impact")
+  .fontSize(function(d) { return fontScale(d.size); })
+  .on("end", draw);
 
-  // Find the word with the highest frequency
-  var maxCount = 0;
-  var mostFrequentWord = "";
-  for (var w in wordCount) {
-    if (wordCount[w] > maxCount) {
-      maxCount = wordCount[w];
-      mostFrequentWord = w;
-    }
-  }
+// start the layout
+layout.start();
 
-  return mostFrequentWord;
+// draw the word cloud and make it interactive
+function draw(words) {
+  var svg = d3.select("#wordcloud").append("svg")
+    .attr("width", layout.size()[0])
+    .attr("height", layout.size()[1])
+    .append("g")
+    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")");
+
+  // create text elements and make them interactive
+  var text = svg.selectAll("text")
+    .data(words)
+    .enter().append("text")
+    .style("font-size", function(d) { return d.size + "px"; })
+    .style("font-family", "Impact")
+    .style("fill", function(d) { return d.color; })
+    .attr("text-anchor", "middle")
+    .attr("transform", function(d) {
+      return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+    })
+    .text(function(d) { return d.text; })
+    .on("click", function(d) {
+      drawWordTree(d.text);
+    });
 }
 
-var inputData = document.getElementById("inputText");
-var txtData = inputData.textContent;
-var wordSelect = document.getElementById("wordSelect");
-var selectedWord = wordSelect.value;
-if (selectedWord === "") {
-  selectedWord = findMostFrequentWord(txtData);
-}
-
-// redraw the word tree every time the user selects a new word
-wordSelect.addEventListener("change", function() {
-  selectedWord = wordSelect.value;
-  drawSimpleNodeChart();
-});
-
-google.charts.load("current", { packages: ["wordtree"] });
-google.charts.setOnLoadCallback(drawSimpleNodeChart);
-function drawSimpleNodeChart() {
-  var chartWidth = document.documentElement.clientWidth * 0.9;
-  var chartHeight = document.documentElement.clientHeight * 0.7;
-
-  var data = google.visualization.arrayToDataTable([["Phrases"], [txtData]]);
-  var options = {
-    wordtree: {
-      format: "implicit",
-      type: "double",
-      word: selectedWord,
-      colors: ['red', 'black', 'green']
-    },
-  };
-
-  var wordtree = new google.visualization.WordTree(
-    document.getElementById("wordtree_double")
-  );
-  wordtree.draw(data, {
-    width: chartWidth,
-    height: chartHeight,
-    ...options
+// draw the WordTree for the selected word
+function drawWordTree(word) {
+  google.charts.load('current', {'packages':['wordtree']});
+  google.charts.setOnLoadCallback(function() {
+    var data = google.visualization.arrayToDataTable([
+      ['Phrases'],
+      [txt_data]
+    ]);
+    var options = {
+      wordtree: {
+        format: 'implicit',
+        type: "double",
+        word: word
+      }
+    };
+    var chart = new google.visualization.WordTree(document.getElementById('wordtree_double'));
+    chart.draw(data, options);
   });
 }

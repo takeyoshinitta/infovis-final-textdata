@@ -2,5 +2,3 @@ Flask
 Jinja2
 requests
 gunicorn
-WordCloud
-STOPWORDS
