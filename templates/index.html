@@ -24,6 +24,16 @@
   <div id="wordtree_double"></div>
 
   <script>
+    var stopWords = ["a", "an", "the", "and", "of", "to", "in", 
+    "that", "for", "with", "on", "at", "from", "by", "or", "but", 
+    "not", "is", "be", "this", "as", "it", "are", "was", "were", 
+    "I", "you", "he", "she", "they", "we", "my", "your", "his", "i", 
+    "her", "their", "our", "me", "him", "her", "us", "them", "ours", 
+    "yours", "theirs", "himself", "herself", "itself", "themselves", 
+    "each", "other", "such", "some", "any", "all", "both", "either", 
+    "neither", "one", "much", "more", "most", "few", "little", "less", 
+    "least", "own", "than"];
+
     // retrieve word_list data from the Flask route
     var word_list = {{ word_json|safe }};
     var input_data = document.getElementById("inputText");
@@ -36,8 +46,10 @@
 
     // create a d3-cloud layout
     var layout = d3.layout.cloud()
-      .size([800, 400])
-      .words(word_list)
+      .size([800, 400])    
+      .words(word_list.filter(function(d) {
+      return stopWords.indexOf(d.text.toLowerCase()) === -1; // filter out stop words
+    }))
       .padding(5)
       .rotate(function() { return ~~(Math.random() * 2) * 90; })
       .font("Impact")
