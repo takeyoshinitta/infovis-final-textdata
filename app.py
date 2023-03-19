@@ -19,7 +19,7 @@ def process_file():
     contents = file.read()
     # convert the contents to a string
     contents_str = contents.decode('utf-8')
-    words = list(set(contents_str.split()))
+    words = list(contents_str.split())
     word_counts = dict(Counter(words))
 
     # transform word_counts to the format expected by d3-cloud
@@ -32,6 +32,8 @@ def process_file():
 
     # convert word_list to JSON and pass it to the template
     word_list_json = json.dumps(word_list)
+
+    print(word_list_json)
 
     timestamp = int(time.time())
 
